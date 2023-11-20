@@ -60,7 +60,6 @@ describe('GET /api', () => {
             return request(app)
             .get('/api')
             .then(({ body }) => {
-                console.log(body)
                 expect(typeof body).toBe('object')
                 expect(body).toEqual(endpoints);
             });
