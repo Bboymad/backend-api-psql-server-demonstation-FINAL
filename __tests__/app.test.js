@@ -81,7 +81,7 @@ describe('GET /api/articles/:article_id', () => {
                 expect(body).toEqual({ msg: 'Article not found' });
             });
         });
-        test.only('should respond with 400 (bad request) when an invalid article id is used', () => {
+        test('should respond with 400 (bad request) when an invalid article id is used', () => {
             return request(app)
             .get('/api/articles/not_an_id')
             .expect(400)
