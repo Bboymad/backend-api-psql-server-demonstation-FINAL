@@ -7,6 +7,17 @@ const request = require('supertest');
 beforeEach(() => seed(testData));
 afterAll(() => db.end());
 
+describe('General errors', () => {
+    test('should respond with 404 when request route is unavailable', () => {
+      return request(app)
+      .get('/api/topicsxxx')
+      .expect(404)
+      .then(({ body }) => {
+      expect(body.msg).toEqual("Invalid endpoint");
+      });
+    });
+  })
+
 describe('GET /api/topics', () => {
     describe('Basic request checks', () => {
         test('returns status 200 on successful request', () => {
