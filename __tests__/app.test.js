@@ -17,8 +17,7 @@ describe('General errors', () => {
       expect(body.msg).toEqual("Invalid endpoint");
       });
     });
-  })
-
+})
 describe('GET /api/topics', () => {
     describe('Basic request checks', () => {
         test('returns status 200 on successful request', () => {
@@ -109,3 +108,51 @@ describe('GET /api', () => {
         });
     })
 })
+describe('GET /api/articles', () => {
+  describe('Basic request checks', () => {
+    test('returns status 200 on successful request', () => {
+      return request(app)
+      .get('/api/articles')
+      .expect(200);
+    });
+    test('responds with an array of all article objects with expected properties', () => {
+      return request(app)
+        .get('/api/articles')
+        .then(({ body }) => {
+          expect(body.articles).toBeInstanceOf(Array);
+          expect(body.articles.length).toBeGreaterThan(0);
+
+          body.articles.forEach(article => {
+            expect(article).toMatchObject({
+              author: expect.any(String),
+              title: expect.any(String),
+              article_id: expect.any(Number),
+              topic: expect.any(String),
+              created_at: expect.any(String),
+              votes: expect.any(Number),
+              article_img_url: expect.any(String),
+              comment_count: expect.any(Number),
+            });
+          });
+        });
+    });
+    });
+    test('should return an array sorted by date descending', () => {
+      return request(app)
+      .get('/api/articles')
+      .then(({ body }) => {
+        expect(body.articles).toBeSortedBy('created_at', {
+          descending: true
+        })
+      });
+    });
+    test('there should not be a body property present on any of the article objects', () => {
+      return request(app)
+      .get('/api/articles')
+      .then(({ body }) => {
+        body.articles.forEach(article => {
+          expect(article).not.toHaveProperty('body');
+        });
+      })  
+    })
+});
