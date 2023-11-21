@@ -3,6 +3,7 @@ const testData = require('../db/data/test-data');
 const seed = require('../db/seeds/seed');
 const app = require('../app');
 const request = require('supertest');
+const endpoints = require('../endpoints.json')
 
 beforeEach(() => seed(testData));
 afterAll(() => db.end());
@@ -91,3 +92,20 @@ describe('GET /api/articles/:article_id', () => {
         });
     });
 });
+describe('GET /api', () => {
+    describe('Basic request checks', () => {
+        test('returns status 200 on successful request', () => {
+            return request(app)
+            .get('/api')
+            .expect(200);
+        });
+        test('response contains a JSON object that is an exact copy of all available endpoints. It contains the correct properties for each valid endpoint', () => {
+            return request(app)
+            .get('/api')
+            .then(({ body }) => {
+                expect(typeof body).toBe('object')
+                expect(body).toEqual(endpoints);
+            });
+        });
+    })
+})
