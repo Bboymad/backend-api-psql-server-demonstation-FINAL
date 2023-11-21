@@ -8,7 +8,8 @@ const { getEndpoints } = require('./controllers/controller.endpoints')
 const {
     invalidEndpoint,
     handleCustomErrors,
-    handlePsqlErrors
+    handlePsqlErrors,
+    handleServerErrors
   } = require('./controllers/controller.errors');
 
 app.get('/api/topics', getTopics);
