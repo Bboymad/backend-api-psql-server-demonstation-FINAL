@@ -1,3 +1,4 @@
+// should I .gitignore this file?
 # Possible Errors
 
 This is an _**incomplete**_ guide to the possible errors that may happen in your app. We have left some of them blank to prompt you to think about the errors that could occur as a client uses each endpoint that you have created.
