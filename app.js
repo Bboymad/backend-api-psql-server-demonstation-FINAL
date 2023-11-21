@@ -18,6 +18,7 @@ app.get('/api', getEndpoints);
 app.all("*", invalidEndpoint);
 app.use(handleCustomErrors);
 app.use(handlePsqlErrors);
+app.use(handleServerErrors);
 
 module.exports = app;
 
