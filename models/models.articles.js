@@ -24,7 +24,7 @@ exports.selectArticles = () => {
       a.created_at,
       a.votes,
       a.article_img_url, 
-      COUNT(c.comment_id) AS comment_count 
+      CAST(COUNT(c.comment_id) AS INTEGER) AS comment_count 
     FROM 
       articles AS a 
     LEFT JOIN

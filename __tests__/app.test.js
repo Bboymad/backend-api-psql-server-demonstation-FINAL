@@ -119,23 +119,23 @@ describe('GET /api/articles', () => {
       return request(app)
         .get('/api/articles')
         .then(({ body }) => {
-          const expectedProperties = [
-            'author',
-            'title',
-            'article_id',
-            'topic',
-            'created_at',
-            'votes',
-            'article_img_url',
-            'comment_count',
-          ];
+          expect(body.articles).toBeInstanceOf(Array);
+          expect(body.articles.length).toBeGreaterThan(0);
+
           body.articles.forEach(article => {
-            expectedProperties.forEach(property => {
-              expect(article).toHaveProperty(property);
+            expect(article).toMatchObject({
+              author: expect.any(String),
+              title: expect.any(String),
+              article_id: expect.any(Number),
+              topic: expect.any(String),
+              created_at: expect.any(String),
+              votes: expect.any(Number),
+              article_img_url: expect.any(String),
+              comment_count: expect.any(Number),
             });
           });
         });
-      });
+    });
     });
     test('should return an array sorted by date descending', () => {
       return request(app)
