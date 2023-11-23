@@ -203,5 +203,33 @@ describe('POST /api/articles/:article_id/comments', () => {
           expect(body.msg).toBe('Bad request');
         });
     });
+    test('Should respond with 404 (not found) and error message when an ID supplied for an article does not exist', () => {
+      const newComment = {
+        username: 'butter_bridge',
+        body: 'This is a test comment!'
+      }
+
+      return request(app)
+        .post('/api/articles/999999/comments')
+        .send(newComment)
+        .expect(404)
+        .then(({ body }) => {
+          expect(body.msg).toBe('Not found');
+        });
+    });
+    test(' should respond with 404 status code and error message when user who does not exist tries to post', () => {
+      const newComment = {
+        username: 'not_A_User',
+        body: 'This is a comment...',
+      };
+
+      return request(app)
+        .post('/api/articles/1/comments')
+        .send(newComment)
+        .expect(404)
+        .then(({ body }) => {
+          expect(body.msg).toBe('Not found');
+        });
+    });
   });
 });

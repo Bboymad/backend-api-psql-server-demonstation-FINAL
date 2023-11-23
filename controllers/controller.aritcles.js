@@ -23,11 +23,8 @@ exports.getArticles = (req, res, next) => {
 exports.postComment = (req, res, next) => {
   const newComment = req.body;
   const { article_id } = req.params;
-  console.log("newComment >", newComment)
-  console.log({ article_id })
   insertComment(article_id, newComment)
   .then((comment) => {
-    console.log("comment >>>", comment)
     res.status(201).send({ comment: comment })
   })
   .catch((err) => 

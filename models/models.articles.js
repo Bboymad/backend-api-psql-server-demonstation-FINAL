@@ -41,6 +41,14 @@ exports.selectArticles = () => {
 exports.insertComment = (article_id, newComment) => {
   const { username, body } = newComment
 
+  if (!username || !body) {
+    return Promise.reject({
+      status: 400,
+      msg: 'Required information is missing',
+    });
+  }
+
+
   return db.query(`
   INSERT INTO comments
   (body, article_id, author)
@@ -49,7 +57,9 @@ exports.insertComment = (article_id, newComment) => {
   RETURNING *;
 `, [body, article_id, username])
   .then(({rows}) => {
-    console.log("rows >>>", rows)
     return rows[0]
   })
+  .catch((err) => {
+    return Promise.reject(err);
+  });
 }
