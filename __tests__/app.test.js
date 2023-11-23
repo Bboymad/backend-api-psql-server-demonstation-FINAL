@@ -18,10 +18,9 @@ describe('General errors', () => {
       });
     });
 });
-})
 
 describe('GET /api/topics', () => {
-    describe('Basic request checks', () => {
+    describe('Request tests', () => {
         test('returns status 200 on successful request', () => {
           return request(app)
             .get('/api/topics')
@@ -51,7 +50,7 @@ describe('GET /api/topics', () => {
     });
 });
 describe('GET /api/articles/:article_id', () => {
-    describe('Basic request checks', () => {
+    describe('Request tests', () => {
         test('returns status 200 on successful request', () => {
             return request(app)
             .get('/api/articles/1')
@@ -94,7 +93,7 @@ describe('GET /api/articles/:article_id', () => {
     });
 });
 describe('GET /api', () => {
-    describe('Basic request checks', () => {
+    describe('Request tests', () => {
         test('returns status 200 on successful request', () => {
             return request(app)
             .get('/api')
@@ -111,7 +110,7 @@ describe('GET /api', () => {
     })
 });
 describe('GET /api/articles/:article_id/comments', () => {
-  describe('Basic request checks', () => {
+  describe('Request tests', () => {
     test('returns status 200 on successful request', () => {
         return request(app)
         .get('/api/articles/1/comments')
@@ -149,10 +148,14 @@ describe('GET /api/articles/:article_id/comments', () => {
       .get('/api/articles/1/comments')
       .then(({ body }) => {
         expect(body.comments).toBeSortedBy('created_at', {
-
-})
+          descending: true
+        })
+      })
+    });
+  });
+});
 describe('GET /api/articles', () => {
-  describe('Basic request checks', () => {
+  describe('Request tests', () => {
     test('returns status 200 on successful request', () => {
       return request(app)
       .get('/api/articles')
@@ -179,7 +182,6 @@ describe('GET /api/articles', () => {
           });
         });
     });
-    });
     test('should return an array sorted by date descending', () => {
       return request(app)
       .get('/api/articles')
@@ -189,7 +191,6 @@ describe('GET /api/articles', () => {
         })
       });
     });
-
   });
   describe('Errors', () => {
     test('should respond with 404 when article id is valid but not found', () => {
@@ -208,8 +209,6 @@ describe('GET /api/articles', () => {
       expect(body).toEqual({ msg: "Bad request" });
       });
     });
-  });
-});
     test('there should not be a body property present on any of the article objects', () => {
       return request(app)
       .get('/api/articles')
@@ -219,4 +218,5 @@ describe('GET /api/articles', () => {
         });
       })  
     })
+  });
 });
