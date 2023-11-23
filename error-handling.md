@@ -57,7 +57,8 @@ The following is _not_ a comprehensive list! Its purpose is just to get the ball
 
 ### GET `/api/articles/:article_id/comments`
 
-- ???
+- 404 not found
+- 400 invalid endpoint
 
 ### GET `/api/articles`
 

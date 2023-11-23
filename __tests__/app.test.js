@@ -17,9 +17,10 @@ describe('General errors', () => {
       expect(body.msg).toEqual("Invalid endpoint");
       });
     });
-})
+});
+
 describe('GET /api/topics', () => {
-    describe('Basic request checks', () => {
+    describe('Request tests', () => {
         test('returns status 200 on successful request', () => {
           return request(app)
             .get('/api/topics')
@@ -49,7 +50,7 @@ describe('GET /api/topics', () => {
     });
 });
 describe('GET /api/articles/:article_id', () => {
-    describe('Basic request checks', () => {
+    describe('Request tests', () => {
         test('returns status 200 on successful request', () => {
             return request(app)
             .get('/api/articles/1')
@@ -92,7 +93,7 @@ describe('GET /api/articles/:article_id', () => {
     });
 });
 describe('GET /api', () => {
-    describe('Basic request checks', () => {
+    describe('Request tests', () => {
         test('returns status 200 on successful request', () => {
             return request(app)
             .get('/api')
@@ -107,9 +108,54 @@ describe('GET /api', () => {
             });
         });
     })
-})
+});
+describe('GET /api/articles/:article_id/comments', () => {
+  describe('Request tests', () => {
+    test('returns status 200 on successful request', () => {
+        return request(app)
+        .get('/api/articles/1/comments')
+        .expect(200);
+    });
+    test('responds with an empty array for a valid, existing article id when no comments are available', () => {
+      return request(app)
+        .get('/api/articles/2/comments')
+        .expect(200)
+        .then(({ body }) => {
+          expect(body.comments).toEqual([])
+      });
+    });
+    test('responds with an array of comment objects for a given article id, each with expected properties', () => {
+      return request(app)
+        .get('/api/articles/1/comments')
+        .then(({ body }) => {
+          expect(body.comments).toBeInstanceOf(Array);
+          expect(body.comments.length).toBeGreaterThan(0);
+    
+          body.comments.forEach((comment) => {
+            expect(comment).toMatchObject({
+              comment_id: expect.any(Number),
+              votes: expect.any(Number),
+              created_at: expect.any(String),
+              author: expect.any(String),
+              body: expect.any(String),
+              article_id: expect.any(Number),
+          })
+        });
+      });
+    });
+    test('should return the comments sorted by date descending (most recent first)', () => {
+      return request(app)
+      .get('/api/articles/1/comments')
+      .then(({ body }) => {
+        expect(body.comments).toBeSortedBy('created_at', {
+          descending: true
+        })
+      })
+    });
+  });
+});
 describe('GET /api/articles', () => {
-  describe('Basic request checks', () => {
+  describe('Request tests', () => {
     test('returns status 200 on successful request', () => {
       return request(app)
       .get('/api/articles')
@@ -136,7 +182,6 @@ describe('GET /api/articles', () => {
           });
         });
     });
-    });
     test('should return an array sorted by date descending', () => {
       return request(app)
       .get('/api/articles')
@@ -144,6 +189,24 @@ describe('GET /api/articles', () => {
         expect(body.articles).toBeSortedBy('created_at', {
           descending: true
         })
+      });
+    });
+  });
+  describe('Errors', () => {
+    test('should respond with 404 when article id is valid but not found', () => {
+      return request(app)
+        .get('/api/articles/99999999/comments')
+        .expect(404)
+        .then(({ body }) => {
+          expect(body).toEqual({ msg: 'Article not found' });
+        });
+    });    
+    test('should respond with 400 when invalid endpoint is used', () => {
+      return request(app)
+      .get('/api/articles/not_an_id/comments')
+      .expect(400)
+      .then(({ body }) => {
+      expect(body).toEqual({ msg: "Bad request" });
       });
     });
     test('there should not be a body property present on any of the article objects', () => {
@@ -203,5 +266,7 @@ describe('POST /api/articles/:article_id/comments', () => {
           expect(body.msg).toBe('Bad request');
         });
     });
+  });
+});
   });
 });
