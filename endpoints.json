@@ -51,7 +51,8 @@
       "author": "butter_bridge",
       "article_id": 5,
       "created_at": 1606176480000
-    },
+    }
+  },
   "GET /api/articles/:article_id/comments": {
     "description": "serves an array of comments for the given article_id",
     "queries": ["sort=desc"],
@@ -63,6 +64,5 @@
       "body": "I find this existence challenging",
       "article_id": 3
       }
-    }
   }
 }
