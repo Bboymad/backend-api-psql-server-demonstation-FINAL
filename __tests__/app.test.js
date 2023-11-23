@@ -18,6 +18,7 @@ describe('General errors', () => {
       });
     });
 });
+})
 
 describe('GET /api/topics', () => {
     describe('Basic request checks', () => {
@@ -148,10 +149,47 @@ describe('GET /api/articles/:article_id/comments', () => {
       .get('/api/articles/1/comments')
       .then(({ body }) => {
         expect(body.comments).toBeSortedBy('created_at', {
+
+})
+describe('GET /api/articles', () => {
+  describe('Basic request checks', () => {
+    test('returns status 200 on successful request', () => {
+      return request(app)
+      .get('/api/articles')
+      .expect(200);
+    });
+    test('responds with an array of all article objects with expected properties', () => {
+      return request(app)
+        .get('/api/articles')
+        .then(({ body }) => {
+          expect(body.articles).toBeInstanceOf(Array);
+          expect(body.articles.length).toBeGreaterThan(0);
+
+          body.articles.forEach(article => {
+            expect(article).toMatchObject({
+              author: expect.any(String),
+              title: expect.any(String),
+              article_id: expect.any(Number),
+              topic: expect.any(String),
+              created_at: expect.any(String),
+              votes: expect.any(Number),
+              article_img_url: expect.any(String),
+              comment_count: expect.any(Number),
+            });
+          });
+        });
+    });
+    });
+    test('should return an array sorted by date descending', () => {
+      return request(app)
+      .get('/api/articles')
+      .then(({ body }) => {
+        expect(body.articles).toBeSortedBy('created_at', {
           descending: true
         })
       });
     });
+
   });
   describe('Errors', () => {
     test('should respond with 404 when article id is valid but not found', () => {
@@ -171,4 +209,14 @@ describe('GET /api/articles/:article_id/comments', () => {
       });
     });
   });
+});
+    test('there should not be a body property present on any of the article objects', () => {
+      return request(app)
+      .get('/api/articles')
+      .then(({ body }) => {
+        body.articles.forEach(article => {
+          expect(article).not.toHaveProperty('body');
+        });
+      })  
+    })
 });
