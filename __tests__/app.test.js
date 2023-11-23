@@ -156,3 +156,52 @@ describe('GET /api/articles', () => {
       })  
     })
 });
+describe('POST /api/articles/:article_id/comments', () => {
+  describe('request tests', () => {
+    test('Responds with status 201 on successful request', () => {
+    const newComment = {
+      username: 'butter_bridge',
+      body: 'This is a test comment!'
+    }
+    return request(app)
+    .post('/api/articles/2/comments')
+    .send(newComment)
+    .expect(201)
+    })
+    test('Responds with newly created object with the correct property labels representing a comment', () => {
+      const newComment = {
+        username: 'butter_bridge',
+        body: 'This is a test comment!'
+      }
+      return request(app)
+      .post('/api/articles/2/comments')
+      .send(newComment)
+      .then(({body}) => {
+        expect(body.comment).toMatchObject({
+          comment_id: expect.any(Number),
+          body: expect.any(String),
+          article_id: expect.any(Number),
+          author: expect.any(String),
+          votes: expect.any(Number),
+          created_at: expect.any(String),
+        });
+      })
+    })
+  })
+  describe('errors', () => {
+    test(' should respond with error 400 (bad request) and error message when using an invalid ID', () => {
+      const newComment = {
+        username: 'butter_bridge',
+        body: 'This is a test comment!'
+      }
+
+      return request(app)
+        .post('/api/articles/not_an_id/comments')
+        .send(newComment)
+        .expect(400)
+        .then(({ body }) => {
+          expect(body.msg).toBe('Bad request');
+        });
+    });
+  });
+});

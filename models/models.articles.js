@@ -13,7 +13,6 @@ exports.selectArticle = (id) => {
     return article
   });
 };
-
 exports.selectArticles = () => {
   return db.query(
     `SELECT 
@@ -39,3 +38,18 @@ exports.selectArticles = () => {
         return rows
       })
 };
+exports.insertComment = (article_id, newComment) => {
+  const { username, body } = newComment
+
+  return db.query(`
+  INSERT INTO comments
+  (body, article_id, author)
+  VALUES
+  ($1, $2, $3)
+  RETURNING *;
+`, [body, article_id, username])
+  .then(({rows}) => {
+    console.log("rows >>>", rows)
+    return rows[0]
+  })
+}
