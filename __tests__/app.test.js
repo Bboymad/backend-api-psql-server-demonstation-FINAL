@@ -177,6 +177,8 @@ describe('POST /api/articles/:article_id/comments', () => {
       .post('/api/articles/2/comments')
       .send(newComment)
       .then(({body}) => {
+        expect(body.comment.article_id).toBe(2);
+
         expect(body.comment).toMatchObject({
           comment_id: expect.any(Number),
           body: expect.any(String),
@@ -229,6 +231,19 @@ describe('POST /api/articles/:article_id/comments', () => {
         .expect(404)
         .then(({ body }) => {
           expect(body.msg).toBe('Not found');
+        });
+    });
+    test('should respond with 400 error message when body is missing from request', () => {
+      const newComment = {
+        username: 'butter_bridge',
+      }
+
+      return request(app)
+        .post('/api/articles/1/comments')
+        .send(newComment)
+        .expect(400)
+        .then(({ body }) => {
+          expect(body.msg).toBe('Required information is missing');
         });
     });
   });
