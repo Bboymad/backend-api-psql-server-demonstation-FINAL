@@ -248,3 +248,30 @@ describe('POST /api/articles/:article_id/comments', () => {
     });
   });
 });
+describe('DELETE /api/comments/:comment_id', () => {
+  describe('request tests', () => {
+    test('Responds with status 204 on successful request', () => {
+      return request(app)
+      .delete('/api/comments/1')
+      .expect(204);
+    })
+  })
+  describe('errors', () => {
+    test(' should respond with status 400 and error message when using an invalid ID', () => {
+      return request(app)
+        .delete('/api/comments/abc')
+        .expect(400)
+        .then(({ body }) => {
+          expect(body.msg).toBe('Bad request');
+      });
+    });
+    test('Should respond with 404 (not found) and error message when an ID supplied for a comment does not exist', () => {
+      return request(app)
+        .delete('/api/comments/99999')
+        .expect(404)
+        .then(({ body }) => {
+          expect(body.msg).toBe('comment_id 99999 not found');
+        });
+    });
+  });
+});
