@@ -220,3 +220,105 @@ describe('GET /api/articles', () => {
     })
   });
 });
+
+describe('PATCH /api/articles/:article_id', () => {
+  describe('Request tests', () => {
+    test('returns status 200 on successful request', () => {
+      const updatedArticle = {
+        inc_votes: 1,
+      };
+      return request(app)
+      .patch('/api/articles/1')
+      .send(updatedArticle)
+      .expect(200);
+    });
+    test('responds with an updated article with an updated votes property value, based on increment', () => {
+      const updatedArticle = {
+        inc_votes: 1,
+      };
+      return request(app)
+        .patch('/api/articles/1')
+        .send(updatedArticle)
+        .then(({ body }) => {
+          const { article } = body
+
+          expect(article).toEqual(
+            expect.objectContaining({
+              author: expect.any(String),
+              title: expect.any(String),
+              article_id: expect.any(Number),
+              topic: expect.any(String),
+              body: expect.any(String),
+              created_at: expect.any(String),
+              votes: expect.any(Number),
+              article_img_url: expect.any(String),
+            })
+          );
+          expect(article.votes).toBe(101);
+        });
+    });
+    test('responds with an updated article with an updated votes property value, based on increment', () => {
+      const updatedArticle = {
+        inc_votes: -1,
+      };
+      return request(app)
+        .patch('/api/articles/1')
+        .send(updatedArticle)
+        .then(({ body }) => {
+          expect(body.article.votes).toBe(99);
+        });
+    });
+  });
+  describe('Errors', () => {
+    test('should respond with 400 status code and error message when body is missing required information', () => {
+      const updatedArticle = {};
+
+      return request(app)
+        .patch('/api/articles/1')
+        .send(updatedArticle)
+        .expect(400)
+        .then(({ body }) => {
+          expect(body.msg).toBe('Username and/or body is missing');
+        });
+    });
+    test('should respond with 400 status code and error message when body has incorrect value types', () => {
+      const updatedArticle = {
+        inc_votes: 'a',
+      };
+
+      return request(app)
+        .patch('/api/articles/1')
+        .send(updatedArticle)
+        .expect(400)
+        .then(({ body }) => {
+          expect(body.msg).toBe('Bad request');
+        });
+    });
+    test('should respond with 400 status code and error message when passing an invalid ID', () => {
+      const updatedArticle = {
+        inc_votes: 1,
+      };
+
+      return request(app)
+        .patch('/api/articles/abc')
+        .send(updatedArticle)
+        .expect(400)
+        .then(({ body }) => {
+          expect(body.msg).toBe('Bad request');
+        });
+    });
+    test('should respond with 404 status code and error message when article with ID supplied does not exist', () => {
+      const updatedArticle = {
+        inc_votes: 1,
+      };
+
+      return request(app)
+        .patch('/api/articles/9999')
+        .send(updatedArticle)
+        .expect(404)
+        .then(({ body }) => {
+          expect(body.msg).toBe('Article not found');
+        });
+    });
+  });
+});

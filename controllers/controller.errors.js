@@ -3,6 +3,7 @@ exports.invalidEndpoint =  (req, res, next) => {
 };
 
 exports.handleCustomErrors = (err, req, res, next) => {
+  console.log("custom err>>>", err)
   if (err.status && err.msg) {
     res.status(err.status).send({ msg: err.msg })
   }
@@ -10,12 +11,17 @@ exports.handleCustomErrors = (err, req, res, next) => {
 };
 
 exports.handlePsqlErrors = (err, req, res, next) => {
+  console.log("22P02 err>>>", err)
   if (err.code === '22P02') {
     res.status(400).send({ msg: 'Bad request' });
+  } else if (err.status === 404 && err.msg === 'Article not found') {
+    res.status(404).send({ msg: 'Article not found' });
+  } else {
+    next(err);
   }
-  else next(err)
 };
 
 exports.handleServerErrors = (err, req, res, next) => {
+  console.log("500 err>>>", err)
   res.status(500).send({ msg: 'Internal Server Error' });
 };

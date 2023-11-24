@@ -34,7 +34,7 @@ The following is _not_ a comprehensive list! Its purpose is just to get the ball
 
 ### GET `/not-a-route`
 
-- Status: ???
+- Status: 400
 
 ---
 
@@ -70,7 +70,7 @@ The following is _not_ a comprehensive list! Its purpose is just to get the ball
 
 ### PATCH `/api/comments/:comment_id`
 
-- ???
+- 
 
 ### DELETE `/api/comments/:comment_id`
 
