@@ -63,7 +63,7 @@ exports.updateArticleById = (article_id, update) => {
   if (!inc_votes) {
     return Promise.reject({
       status: 400,
-      msg: 'Username and/or body is missing',
+      msg: 'Required information is missing',
     });
   }
 
