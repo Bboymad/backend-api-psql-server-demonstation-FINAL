@@ -13,7 +13,6 @@ exports.selectArticle = (id) => {
     return article
   });
 };
-
 exports.selectArticleComments = (id) => {
   return db.query(
     `SELECT
@@ -33,7 +32,6 @@ exports.selectArticleComments = (id) => {
     return rows
   });
 }
-
 exports.selectArticles = () => {
   return db.query(
     `SELECT 
@@ -58,6 +56,33 @@ exports.selectArticles = () => {
       .then(({ rows }) => {
         return rows
       })
+};
+exports.updateArticleById = (article_id, update) => {
+  const { inc_votes } = update;
+
+  if (!inc_votes) {
+    return Promise.reject({
+      status: 400,
+      msg: 'Required information is missing',
+    });
+  }
+
+  const query = `
+  UPDATE articles
+  SET
+  votes = votes + $1
+  WHERE 
+  article_id = $2
+  RETURNING *;
+  `;
+  
+  return db.query(query, [inc_votes, article_id])
+    .then(({ rows }) => {
+      return rows[0];
+    })
+    .catch((err) => {
+      return Promise.reject(err);
+    });
 };
 
 exports.insertComment = (article_id, newComment) => {
