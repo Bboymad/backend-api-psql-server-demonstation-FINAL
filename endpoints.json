@@ -64,5 +64,9 @@
       "body": "I find this existence challenging",
       "article_id": 3
       }
+  },
+  "DELETE /api/comments/:comment_id": {
+    "description": "deletes a given comment by comment id. Does not respond with any content.",
+    "queries": []
   }
 }

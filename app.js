@@ -7,6 +7,8 @@ const { getTopics } = require('./controllers/controller.topics')
 
 const { getEndpoints } = require('./controllers/controller.endpoints')
 
+const { deleteComment } = require('./controllers/controller.comments')
+
 const {
     invalidEndpoint,
     handleCustomErrors,
@@ -22,6 +24,7 @@ app.get('/api', getEndpoints);
 app.get('/api/articles/:article_id/comments', getArticleComments)
 app.get('/api/articles', getArticles)
 app.post('/api/articles/:article_id/comments', postComment)
+app.delete('/api/comments/:comment_id', deleteComment)
 
 
 app.all("*", invalidEndpoint);
