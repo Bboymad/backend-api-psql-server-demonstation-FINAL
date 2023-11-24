@@ -12,7 +12,6 @@
   "GET /api/articles": {
     "description": "serves an array of all articles",
     "queries": [],
-    "requestFormat": "N/A",
     "exampleResponse": {
       "articles": [
         {
@@ -41,6 +40,17 @@
       "votes": 100,
       "article_img_url":
         "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700"
+    }
+  },
+  "POST /api/articles/:article_id/comments": {
+    "description": "posts a new user comment to an article",
+    "queries": [],
+    "exampleResponse": {
+      "body": "I am 100% sure that we're not completely sure.",
+      "votes": 1,
+      "author": "butter_bridge",
+      "article_id": 5,
+      "created_at": 1606176480000
     }
   },
   "GET /api/articles/:article_id/comments": {

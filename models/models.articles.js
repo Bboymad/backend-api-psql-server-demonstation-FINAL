@@ -85,3 +85,24 @@ exports.updateArticleById = (article_id, update) => {
     });
 };
 
+exports.insertComment = (article_id, newComment) => {
+  const { username, body } = newComment
+  
+  if (!username || !body) {
+    return Promise.reject({
+      status: 400,
+      msg: 'Required information is missing',
+    });
+  }
+
+  return db.query(`
+  INSERT INTO comments
+  (body, article_id, author)
+  VALUES
+  ($1, $2, $3)
+  RETURNING *;
+`, [body, article_id, username])
+  .then(({rows}) => {
+    return rows[0]
+  })
+}

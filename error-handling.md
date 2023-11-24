@@ -35,6 +35,7 @@ The following is _not_ a comprehensive list! Its purpose is just to get the ball
 ### GET `/not-a-route`
 
 - Status: 400
+- Status: 404
 
 ---
 
@@ -53,7 +54,7 @@ The following is _not_ a comprehensive list! Its purpose is just to get the ball
 
 ### POST `/api/articles/:article_id/comments`
 
-- ???
+- 400: bad request
 
 ### GET `/api/articles/:article_id/comments`
 
